@@ -31,3 +31,11 @@ var c,python,java,cpp bool
 2. implicit type
 
 其实就是var的一种隐式的行为
+
+## 实验项目
+我有一个Go的小白鼠项目，如果有需要可以clone一份．
+
+| 名称  | 地址 |
+|---|---|
+|git地址|https://github.com/liuxuzxx/mouse|
+|git的clone地址|https://github.com/liuxuzxx/mouse.git|

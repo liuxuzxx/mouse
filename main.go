@@ -20,9 +20,9 @@ func main() {
 	sum := packages.Sum(10, 20)
 	fmt.Println("The sum is:", sum)
 
-	fmt.Println(packages.Swap("liu","xu"))
+	fmt.Println(packages.Swap("liu", "xu"))
 	x, y := packages.Split(25)
-	fmt.Println("查看两个返回值:",x,y)
+	fmt.Println("查看两个返回值:", x, y)
 	packages.Variable()
 
 	flow.DoubleNumber()
@@ -32,7 +32,7 @@ func main() {
 
 	name := "liuxuzxx"
 	complex.ChangeName(&name)
-	fmt.Println("This is name:",name)
+	fmt.Println("This is name:", name)
 	complex.CreateStruct()
 
 	complex.SlicesStatement()
@@ -41,4 +41,6 @@ func main() {
 	complex.StrategyOperation("real")
 
 	method.MethodOperation()
+
+	method.InterfaceOperation()
 }
