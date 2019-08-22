@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"mouse/complex"
 	"mouse/flow"
+	"mouse/goroutines"
 	"mouse/method"
 	"mouse/packages"
 	"time"
@@ -43,4 +44,7 @@ func main() {
 	method.MethodOperation()
 
 	method.InterfaceOperation()
+
+	goroutines.StartGoRoutines("No-Die")
+	goroutines.LogInformation("Main")
 }
