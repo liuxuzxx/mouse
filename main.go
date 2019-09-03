@@ -47,4 +47,7 @@ func main() {
 
 	goroutines.StartGoRoutines("No-Die")
 	goroutines.LogInformation("Main")
+
+	goroutines.InvokeChanSum()
+	goroutines.BufferChannel()
 }
