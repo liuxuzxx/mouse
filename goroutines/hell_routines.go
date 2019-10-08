@@ -15,7 +15,7 @@ func LogInformation(routineName string) {
 	}
 }
 
-func StartGoRoutines(routneName string) {
-	fmt.Println("Start a go routine:", routneName)
+func StartGoRoutines(routineName string) {
+	fmt.Println("Start a go routine:", routineName)
 	go LogInformation("Go-Liuxu")
 }
