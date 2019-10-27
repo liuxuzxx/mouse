@@ -3,6 +3,7 @@ package main
 import (
 	"mouse/article"
 	"mouse/command"
+	"mouse/http"
 )
 
 /**
@@ -53,4 +54,5 @@ func main() {
 	article.LoadChuci()
 	command.ShowCommandArguments()
 	//command.Lissajous(os.Stdout)
+	http.HttpServer()
 }
