@@ -3,7 +3,7 @@ package main
 import (
 	"mouse/article"
 	"mouse/command"
-	"mouse/http"
+	"mouse/leetcode"
 )
 
 /**
@@ -54,5 +54,6 @@ func main() {
 	article.LoadChuci()
 	command.ShowCommandArguments()
 	//command.Lissajous(os.Stdout)
-	http.HttpServer()
+	//http.HttpServer()
+	leetcode.PalindromeNumber()
 }
