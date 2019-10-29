@@ -51,6 +51,8 @@ import "fmt"
 //Output: false
 
 //还是按照我的想法去做：就是正则表达式--->NFA--->DFA.使用编译原理的状态机的机制去做这个正则表达式。我想想啊
+//但是何其难
+//深邃啊，使用动态规划的思想，还是拆解子问题，只是判断情况多了些，不过，我还是坚持NFA的做法
 func RegularExpressionMatching() {
 	pattern := "a*"
 	source := "aaa"
