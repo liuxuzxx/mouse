@@ -1,7 +1,6 @@
 package main
 
 import (
-	"mouse/article"
 	"mouse/command"
 	"mouse/leetcode"
 )
@@ -51,7 +50,7 @@ func main() {
 
 		goroutines.InvokeChanSum()
 		goroutines.BufferChannel()*/
-	article.LoadChuci()
+	//article.LoadChuci()
 	command.ShowCommandArguments()
 	//command.Lissajous(os.Stdout)
 	//http.HttpServer()
@@ -60,4 +59,5 @@ func main() {
 	leetcode.ContainerWithMostWater()
 	leetcode.IntegerToRoman()
 	leetcode.RomanToInteger()
+	leetcode.LongestCommonPrefix()
 }
