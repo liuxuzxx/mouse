@@ -59,4 +59,5 @@ func main() {
 	leetcode.RegularExpressionMatching()
 	leetcode.ContainerWithMostWater()
 	leetcode.IntegerToRoman()
+	leetcode.RomanToInteger()
 }
