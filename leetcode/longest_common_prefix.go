@@ -23,7 +23,7 @@ import "fmt"
 //All given inputs are in lowercase letters a-z.
 
 func LongestCommonPrefix() {
-	sources := []string{"dog"}
+	sources := []string{"aca", "cba"}
 	result := doLongestCommonPrefix(sources)
 	fmt.Printf("The common prefix string is:%s\n", result)
 }
@@ -32,7 +32,7 @@ func doLongestCommonPrefix(sources []string) string {
 	if len(sources) == 0 {
 		return ""
 	}
-	result := twoCommonPrefix(sources[0], sources[0])
+	result := sources[0]
 	for index := 1; index < len(sources); index++ {
 		result = twoCommonPrefix(result, sources[index])
 	}
@@ -47,6 +47,8 @@ func twoCommonPrefix(left, right string) string {
 	for index := 0; index < minIndex; index++ {
 		if string(leftRune[index]) == string(rightRune[index]) {
 			result += string(leftRune[index])
+		} else {
+			break
 		}
 	}
 	return result
