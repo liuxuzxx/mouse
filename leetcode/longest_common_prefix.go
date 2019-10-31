@@ -24,7 +24,8 @@ import "fmt"
 
 func LongestCommonPrefix() {
 	sources := []string{"aca", "cba"}
-	result := doLongestCommonPrefix(sources)
+	//result := doLongestCommonPrefix(sources)
+	result := doRecursive(sources)
 	fmt.Printf("The common prefix string is:%s\n", result)
 }
 
@@ -52,4 +53,22 @@ func twoCommonPrefix(left, right string) string {
 		}
 	}
 	return result
+}
+
+//使用分治算法来处理，这速度还是有点慢啊
+func doDivideLongestCommonPrefix(sources []string) string {
+	if len(sources) == 0 {
+		return ""
+	}
+	return doRecursive(sources)
+}
+
+func doRecursive(sources []string) string {
+	if len(sources) == 1 {
+		return sources[0]
+	}
+	middle := len(sources) / 2
+	left := doRecursive(sources[0:middle])
+	right := doRecursive(sources[middle:])
+	return twoCommonPrefix(left, right)
 }
