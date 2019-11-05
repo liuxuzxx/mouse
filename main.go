@@ -1,7 +1,6 @@
 package main
 
 import (
-	"mouse/article"
 	"mouse/command"
 	"mouse/leetcode"
 )
@@ -62,5 +61,6 @@ func main() {
 	leetcode.RomanToInteger()
 	leetcode.LongestCommonPrefix()
 
-	article.SpiderIdioms()
+	//article.SpiderIdioms()
+	leetcode.ThreeSum()
 }
