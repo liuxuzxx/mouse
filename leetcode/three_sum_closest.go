@@ -24,8 +24,11 @@ func ThreeSumClosest() {
 		return
 	}
 	quickSort(sourceArr, 0, len(sourceArr)-1)
-	closestTuple := doThreeSumClosest(sourceArr, -6)
-	fmt.Printf("和最接近:%d %d %d\n", closestTuple.first, closestTuple.second, closestTuple.third)
+	closestTuple := doThreeSumClosest(sourceArr, 1)
+	fmt.Printf("和最接近:%d \n", closestTuple.first+closestTuple.second+closestTuple.third)
+
+	left, right := binarySearch(sourceArr, -3)
+	fmt.Printf("left:right=%d-%d", left, right)
 }
 
 func quickSort(sourceArr []int, left int, right int) {
@@ -86,4 +89,33 @@ func abs(source int) int {
 		return -1 * source
 	}
 	return source
+}
+
+//
+//当二分法查找不到，但是又需要查找一个范围的时候，那肯定就是
+//返回两个索引了，一左一右
+//
+func binarySearch(sourceArr []int, target int) (int, int) {
+	if target < sourceArr[0] {
+		return 0, 0
+	}
+	if target > sourceArr[len(sourceArr)-1] {
+		return len(sourceArr) - 1, len(sourceArr) - 1
+	}
+	return doBinarySearch(sourceArr, 0, len(sourceArr)-1, target)
+}
+
+func doBinarySearch(sourceArr []int, left int, right int, target int) (int, int) {
+	if right-left < 2 {
+		return left, right
+	}
+	middle := (left + right) / 2
+	if sourceArr[middle] == target {
+		return middle, middle
+	} else if sourceArr[middle] > target {
+		return doBinarySearch(sourceArr, left, middle, target)
+	} else {
+		return doBinarySearch(sourceArr, middle, right, target)
+	}
+
 }
