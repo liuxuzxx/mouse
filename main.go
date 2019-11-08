@@ -63,4 +63,5 @@ func main() {
 
 	//article.SpiderIdioms()
 	leetcode.ThreeSum()
+	leetcode.ThreeSumClosest()
 }
