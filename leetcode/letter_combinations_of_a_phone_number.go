@@ -22,10 +22,14 @@ import (
 //Although the above answer is in lexicographical order, your answer could be in any order you want.
 
 func LetterCombinationsOfAPhoneNumber() {
-
+	numbers := "3894369"
+	result := doLetterCombinationsOfAPhoneNumber(numbers)
+	for _, value := range result {
+		fmt.Printf("%s,", value)
+	}
 }
 
-func doLetterCombinationsOfAPhoneNumber(phoneNumber string) {
+func doLetterCombinationsOfAPhoneNumber(phoneNumber string) []string {
 	phoneLetter := map[int64]string{
 		2: "abc",
 		3: "def",
@@ -37,9 +41,22 @@ func doLetterCombinationsOfAPhoneNumber(phoneNumber string) {
 		9: "wxyz",
 	}
 
+	result := make([]string, 0)
+	result = append(result, "")
 	for _, value := range phoneNumber {
 		number, _ := strconv.ParseInt(string(value), 10, 64)
-		s := phoneLetter[number]
-		fmt.Printf("%s", s)
+		letters := phoneLetter[number]
+		result = combinationTwo(letters, result)
 	}
+	return result
+}
+
+func combinationTwo(letters string, tempCombination []string) []string {
+	combination := make([]string, 0)
+	for _, value := range letters {
+		for _, combinationValue := range tempCombination {
+			combination = append(combination, string(value)+combinationValue)
+		}
+	}
+	return combination
 }

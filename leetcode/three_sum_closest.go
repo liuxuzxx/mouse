@@ -28,7 +28,7 @@ func ThreeSumClosest() {
 	fmt.Printf("和最接近:%d \n", closestTuple.first+closestTuple.second+closestTuple.third)
 
 	left, right := binarySearch(sourceArr, -3)
-	fmt.Printf("left:right=%d-%d", left, right)
+	fmt.Printf("left:right=%d-%d\n", left, right)
 }
 
 func quickSort(sourceArr []int, left int, right int) {
