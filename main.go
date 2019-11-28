@@ -66,4 +66,5 @@ func main() {
 	leetcode.ThreeSumClosest()
 	leetcode.LetterCombinationsOfAPhoneNumber()
 	leetcode.FourSum()
+	leetcode.RemoteNthNodeFromEndOfList(2)
 }
