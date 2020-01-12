@@ -1,6 +1,7 @@
 package main
 
 import (
+	"mouse/book"
 	"mouse/command"
 	"mouse/leetcode"
 )
@@ -67,4 +68,7 @@ func main() {
 	leetcode.LetterCombinationsOfAPhoneNumber()
 	leetcode.FourSum()
 	leetcode.RemoteNthNodeFromEndOfList(2)
+
+	//<The Go Programming Language>
+	book.CalMoney(13)
 }
