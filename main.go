@@ -70,6 +70,7 @@ func main() {
 	leetcode.RemoteNthNodeFromEndOfList(2)
 
 	//<The Go Programming Language>
-	book.CalMoney(13)
-	book.Goroutine()
+	//book.CalMoney(13)
+	//book.Goroutine()
+	book.Server()
 }
