@@ -71,4 +71,5 @@ func main() {
 
 	//<The Go Programming Language>
 	book.CalMoney(13)
+	book.Goroutine()
 }
