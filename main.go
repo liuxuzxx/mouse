@@ -55,6 +55,22 @@ func main() {
 	command.ShowCommandArguments()
 	//command.Lissajous(os.Stdout)
 	//http.HttpServer()
+
+	goBook()
+
+}
+
+func goBook() {
+	book.IntegerType()
+	book.CompareFloat()
+	book.CalMoney(13)
+	book.ComplexNumbers()
+	book.StringFound()
+	//book.Goroutine()
+	//book.Server()
+}
+
+func leetCode() {
 	leetcode.PalindromeNumber()
 	leetcode.RegularExpressionMatching()
 	leetcode.ContainerWithMostWater()
@@ -68,9 +84,4 @@ func main() {
 	leetcode.LetterCombinationsOfAPhoneNumber()
 	leetcode.FourSum()
 	leetcode.RemoteNthNodeFromEndOfList(2)
-
-	//<The Go Programming Language>
-	//book.CalMoney(13)
-	//book.Goroutine()
-	book.Server()
 }

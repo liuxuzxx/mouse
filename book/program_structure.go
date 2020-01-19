@@ -15,7 +15,7 @@ const boiling = 0.98
 func CalMoney(count int) {
 	var f = boiling
 	var sum = (f - 32) * 5 / 9
-	fmt.Printf("boiling point:%g", sum)
+	fmt.Printf("boiling point:%g\n", sum)
 }
 
 //Variables:变量，程序的灵魂
