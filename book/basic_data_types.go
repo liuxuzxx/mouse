@@ -71,6 +71,7 @@ func StringFound() {
 		fmt.Printf("%d\t%c ", i, r)
 		i += size
 	}
+	fmt.Println()
 }
 
 type Money float64

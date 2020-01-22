@@ -66,6 +66,11 @@ func goBook() {
 	book.CalMoney(13)
 	book.ComplexNumbers()
 	book.StringFound()
+	book.ShowLanguage()
+	book.ShowWeek()
+	book.PartInitial()
+	book.Sha256()
+	book.SliceMonth()
 	//book.Goroutine()
 	//book.Server()
 }
