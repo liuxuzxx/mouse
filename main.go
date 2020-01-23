@@ -71,6 +71,11 @@ func goBook() {
 	book.PartInitial()
 	book.Sha256()
 	book.SliceMonth()
+	book.CompareSlice()
+	book.Reverse()
+	book.AppendElement()
+	book.InitialMap()
+	book.AddressSliceAndMap()
 	//book.Goroutine()
 	//book.Server()
 }

@@ -3,6 +3,8 @@ package book
 import (
 	"crypto/sha256"
 	"fmt"
+	"reflect"
+	"time"
 )
 
 //复杂类型，就是简单类型的组合关系
@@ -75,9 +77,124 @@ var (
 )
 
 func SliceMonth() {
+	summer := Month[11:]
+	summer = append(summer, "Year")
+	fmt.Println(Month)
+}
+
+func CompareSlice() {
 	summer := Month[4:7]
-	fmt.Printf("Capacity:%d Size:%d\n", cap(summer), len(summer))
-	for i, v := range summer {
-		fmt.Printf("Index:%d Value:%s\n", i, v)
+	partSummer := Month[4:]
+	for _, outValue := range summer {
+		for _, inValue := range partSummer {
+			if outValue == inValue {
+				fmt.Printf("找到了一样的数据:%s %s\n", outValue, inValue)
+			}
+		}
 	}
+}
+
+func Reverse() {
+	doReverse(Month[4:7])
+	doReverse(Month[:])
+	fmt.Println(Month)
+}
+
+//注意[]string的意思是传递一个切片，不是一个数组，虽然切片的底层还是数组
+func doReverse(source []string) {
+	for i, j := 0, len(source)-1; i < j; i, j = i+1, j-1 {
+		source[i], source[j] = source[j], source[i]
+	}
+}
+
+//怪不得Go语言这本书籍一直在说，数组和Slice不一样，Slice是可变化的，数组是固定死的
+func AppendElement() {
+	var words []rune
+	for _, v := range "Hello,世界你好，我很好！" {
+		words = append(words, v)
+		fmt.Printf("Capacity:%d Size:%d\n", cap(words), len(words))
+	}
+	fmt.Println(words)
+}
+
+//
+//总体来说Array和Slice确实是大不一样啊，Array具有固定性质，类型都给固定死了，但是Slice是可以随便变化的
+//Array根据存储的元素类型和元素个数为综合类型，但是Slice只是以存储的元素作为类型
+//
+
+//进入map类型的研究，基本上所有的语言都有这些个特性数据结构，所以不用那么仔细的查看学习
+
+func InitialMap() {
+	students := map[int64]string{
+		1: "Linux",
+		2: "Suse",
+		3: "Feroa",
+	}
+
+	students[9] = "Rondo"
+	delete(students, 2)
+	//But a map element is not a variable,and
+	//One reason that we can’t take the address of a map element is that growing a map might cause
+	//rehashing of existing elements into new storage locations, thus potentially invalidating the
+	//address.
+
+	for key, value := range students {
+		fmt.Printf("Key:%d Value:%s\n", key, value)
+	}
+
+	var languages map[string]Language
+	languages = make(map[string]Language)
+	languages["Java"] = Language{
+		name:     "Java",
+		age:      24,
+		birthday: time.Time{},
+	}
+}
+
+type Language struct {
+	name     string
+	age      int8
+	birthday time.Time
+}
+
+//我感觉<The Go Language>这本书关于map不能进行&操作是一个错误的没有逻辑闭环的描述操作
+//首先是：你说他不是变量，那么不是变量如何可以赋值，你说他会重新rehash,那么Slice也会重新分配内存啊
+//Slice进行扩充的时候为什么指针地址没有变化
+//这个应该是获取的是Slice类型的地址，并不是里面元素的地址
+//There is a major difference between slices and maps: Slices are backed by a backing array and maps are not.
+//
+//If a map grows or shrinks a potential pointer to a map element may become a dangling pointer pointing into nowhere (uninitialised memory). The problem here is not "confusion of the user" but that it would break a major design element of Go: No dangling pointers.
+//
+//If a slice runs out of capacity a new, larger backing array is created and the old backing array is copied into the new; and the old backing array remains existing. Thus any pointers obtained from the "ungrown" slice pointing into the old backing array are still valid pointers to valid memory.
+//
+//If you have a slice still pointing to the old backing array (e.g. because you made a copy of the slice before growing the slice beyond its capacity) you still access the old backing array. This has less to do with pointers of slice elements, but slices being views into arrays and the arrays being copied during slice growth.
+//
+//Note that there is no "reducing the backing array of a slice" during slice shrinkage.
+//只能说上面的解释稍微合理一些
+//没有想到一点疑问竟然可以挖掘到了Go语言的底层
+
+func AddressSliceAndMap() {
+	languages := make([]Language, 2, 2)
+	languages[0] = Language{
+		name:     "Java",
+		age:      1,
+		birthday: time.Time{},
+	}
+
+	languages[1] = Language{
+		name:     "Dart",
+		age:      3,
+		birthday: time.Time{},
+	}
+
+	first := reflect.ValueOf(&languages[1]).Pointer()
+	fmt.Println("地址是:", first)
+	languages = append(languages, Language{
+		name:     "Flutter",
+		age:      5,
+		birthday: time.Time{},
+	})
+
+	second := reflect.ValueOf(&languages[1]).Pointer()
+	fmt.Println("地址是:", second)
 }
