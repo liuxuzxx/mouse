@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"mouse/book"
 	"mouse/command"
 	"mouse/leetcode"
@@ -76,6 +77,11 @@ func goBook() {
 	book.AppendElement()
 	book.InitialMap()
 	book.AddressSliceAndMap()
+	book.ConvertToJSON()
+	err := book.ReadFile("")
+	if err != nil {
+		fmt.Println(err)
+	}
 	//book.Goroutine()
 	//book.Server()
 }

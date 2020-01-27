@@ -2,6 +2,7 @@ package book
 
 import (
 	"crypto/sha256"
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"time"
@@ -198,3 +199,55 @@ func AddressSliceAndMap() {
 	second := reflect.ValueOf(&languages[1]).Pointer()
 	fmt.Println("地址是:", second)
 }
+
+//Structs，结构体，一个迈向面向对象变成的桥梁
+//构造一个Node节点的结构体，数据和前面的节点指针和后面的节点指针
+//书上所谓复杂的例子其实就是Java的面向对象的思想的封装思维
+type Node struct {
+	data string
+	pre  *Node
+	next *Node
+}
+
+type Point struct {
+	X int64
+	Y int64
+}
+
+type Circle struct {
+	Point
+	Radius int64
+}
+
+type Wheel struct {
+	Circle
+	Spokes int64
+}
+
+//JSON的数据形式，就是一种序列化的操作
+type AncientArticle struct {
+	Title      string `json:"title"`
+	Author     string `json:"author"`
+	Context    string `json:"context"`
+	CreateTime time.Time
+	Commit     string `json:"comment"`
+}
+
+func ConvertToJSON() {
+	var article = AncientArticle{
+		Title:      "诵读少妇之人枢轴",
+		Author:     "李白",
+		Context:    "成曲阜三嗪，凤眼望五金．浴巾离别意，同时还有人",
+		CreateTime: time.Time{},
+		Commit:     "作者的离别制作",
+	}
+
+	data, err := json.MarshalIndent(article, "", "	")
+	if err != nil {
+		fmt.Println("出现一个错误！")
+	}
+	fmt.Printf("%s\n", data)
+}
+
+//Text And Template这种就是类似于之前的structs的那种jstl的形式处理标签
+//具体的例子我就不实验了，没有必要在某些小细节上一直的扣啊扣的
