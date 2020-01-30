@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"os"
 	"time"
 )
 
@@ -70,4 +71,32 @@ func handleConnection(connection net.Conn) {
 			return
 		}
 	}
+}
+
+//使用channel通道的性质
+
+var (
+	source = make(chan int64)
+	square = make(chan int64)
+)
+
+func Pipeline() {
+	go func() {
+		for x := 0; x < 10000; x += 1 {
+			source <- int64(x)
+		}
+		close(source)
+	}()
+
+	go func() {
+		for x := range source {
+			square <- x * x
+		}
+		close(square)
+	}()
+
+	for x := range square {
+		fmt.Printf("平方数字:%d\n", x)
+	}
+	os.Exit(0)
 }

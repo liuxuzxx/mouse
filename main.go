@@ -82,10 +82,13 @@ func goBook() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	book.DivideNumber(0)
+	book.DivideNumber(10)
 	book.FunctionPoint()
 	name := book.DeferOperation()
 	fmt.Printf("茶案名字:%s\n", name)
+	book.OperationArea()
+	book.RemoteStrategy()
+	book.Pipeline()
 	//book.Goroutine()
 	//book.Server()
 }
