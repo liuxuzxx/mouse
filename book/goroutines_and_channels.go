@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"net"
-	"os"
 	"time"
 )
 
@@ -74,29 +73,54 @@ func handleConnection(connection net.Conn) {
 }
 
 //使用channel通道的性质
-
-var (
-	source = make(chan int64)
-	square = make(chan int64)
-)
-
 func Pipeline() {
-	go func() {
-		for x := 0; x < 10000; x += 1 {
-			source <- int64(x)
-		}
-		close(source)
-	}()
+	var (
+		source = make(chan int64)
+		square = make(chan int64)
+	)
+	go sourceNumber(source)
+	go squareNumber(source, square)
+	printChannel(square)
+}
 
-	go func() {
-		for x := range source {
-			square <- x * x
-		}
-		close(square)
-	}()
-
-	for x := range square {
-		fmt.Printf("平方数字:%d\n", x)
+//拆分成函数的形式
+func sourceNumber(source chan int64) {
+	for x := 0; x < 10000; x += 1 {
+		fmt.Printf("存取数:%d\n", x)
+		source <- int64(x)
 	}
-	os.Exit(0)
+	close(source)
+}
+
+func squareNumber(in chan int64, out chan int64) {
+	for x := range in {
+		fmt.Printf("平方数:%d\n", x*x)
+		out <- x * x
+	}
+	close(out)
+}
+
+func printChannel(in chan int64) {
+	for x := range in {
+		fmt.Printf("结果:%d\n", x)
+	}
+}
+
+//实验一个带有buffer的channel
+
+func BufferChannel() {
+	var (
+		source = make(chan int64, 3)
+		square = make(chan int64, 3)
+	)
+	go sourceNumber(source)
+	go squareNumber(source, square)
+	printChannel(square)
+}
+
+//按照测试的结果，没有buffer的channel也并不是那么严格的synchronized,测试发现出现一些打印不是那么
+//排列整齐的形式
+
+func ThumbnailImage() {
+
 }

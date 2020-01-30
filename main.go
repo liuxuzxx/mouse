@@ -89,6 +89,7 @@ func goBook() {
 	book.OperationArea()
 	book.RemoteStrategy()
 	book.Pipeline()
+	book.BufferChannel()
 	//book.Goroutine()
 	//book.Server()
 }
