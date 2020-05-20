@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"mouse/book"
-	"mouse/command"
 	"mouse/leetcode"
 )
 
@@ -53,12 +52,12 @@ func main() {
 		goroutines.InvokeChanSum()
 		goroutines.BufferChannel()*/
 	//article.LoadChuci()
-	command.ShowCommandArguments()
+	//command.ShowCommandArguments()
 	//command.Lissajous(os.Stdout)
 	//http.HttpServer()
 
-	goBook()
-
+	//goBook()
+	leetcode.ValidParentheses()
 }
 
 func goBook() {
@@ -108,4 +107,5 @@ func leetCode() {
 	leetcode.LetterCombinationsOfAPhoneNumber()
 	leetcode.FourSum()
 	leetcode.RemoteNthNodeFromEndOfList(2)
+	leetcode.ValidParentheses()
 }
