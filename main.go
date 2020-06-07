@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"mouse/book"
-	"mouse/goroutines"
 	"mouse/leetcode"
 )
 
@@ -58,7 +57,7 @@ func main() {
 	//http.HttpServer()
 
 	//goBook()
-	goroutines.StartProxy()
+	leetcode.ValidParentheses()
 }
 
 func goBook() {
@@ -108,4 +107,5 @@ func leetCode() {
 	leetcode.LetterCombinationsOfAPhoneNumber()
 	leetcode.FourSum()
 	leetcode.RemoteNthNodeFromEndOfList(2)
+	leetcode.ValidParentheses()
 }
