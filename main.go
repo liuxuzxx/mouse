@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"mouse/book"
-	"mouse/command"
+	"mouse/goroutines"
 	"mouse/leetcode"
 )
 
@@ -53,12 +53,12 @@ func main() {
 		goroutines.InvokeChanSum()
 		goroutines.BufferChannel()*/
 	//article.LoadChuci()
-	command.ShowCommandArguments()
+	//command.ShowCommandArguments()
 	//command.Lissajous(os.Stdout)
 	//http.HttpServer()
 
-	goBook()
-
+	//goBook()
+	goroutines.StartProxy()
 }
 
 func goBook() {
