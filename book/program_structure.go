@@ -28,6 +28,10 @@ var (
 )
 
 //Short variables
+//GO语言的short variables name,这种方式主要是为了处理local
+//变量的，所以不用写类型，毕竟你开始的时候就已经初始化了
+//还有一个就是不可以重复定义声明，但是，好像只要有一个不一样就可以
+//这个规则很奇怪啊，按照道理来说应该是都不一样才行啊.
 func animal(count int) string {
 	animalNumber := 10
 	fmt.Print(animalNumber)
