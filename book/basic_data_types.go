@@ -87,8 +87,12 @@ func SumMoney(count int) Money {
 }
 
 func RuneRange(content string) {
-	fmt.Printf("字符串的byte长度:%d\n",len(content))
+	fmt.Printf("字符串的byte长度:%d\n", len(content))
 	for index, value := range content {
 		fmt.Printf("%d %c\n", index, value)
+	}
+	runes := []rune(content)
+	for _, character := range runes {
+		fmt.Printf("%x\n", character)
 	}
 }
