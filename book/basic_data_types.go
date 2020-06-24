@@ -85,3 +85,10 @@ var (
 func SumMoney(count int) Money {
 	return Money(Price(count) * price)
 }
+
+func RuneRange(content string) {
+	fmt.Printf("字符串的byte长度:%d\n",len(content))
+	for index, value := range content {
+		fmt.Printf("%d %c\n", index, value)
+	}
+}
