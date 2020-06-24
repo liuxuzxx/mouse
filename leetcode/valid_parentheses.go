@@ -94,3 +94,4 @@ func (s Stack) compare(parentheses byte) {
 		s.push(parentheses)
 	}
 }
+
