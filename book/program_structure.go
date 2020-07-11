@@ -45,3 +45,7 @@ func animal(count int) string {
 	fmt.Print(clues, defect)
 	return "liuxu"
 }
+
+func init(){
+	fmt.Println("Go语言具备init这个函数，有点生命周期的味道")
+}
