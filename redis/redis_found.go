@@ -11,9 +11,10 @@ import (
 //另外一个就是可以尽可能最大的提高Redis的读写性能
 //
 var ctx = context.Background()
+var rdb *redis.Client
 
-func RedisClient() {
-	rdb := redis.NewClient(&redis.Options{
+func redisClient() {
+	rdb = redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
@@ -21,4 +22,12 @@ func RedisClient() {
 
 	pong, err := rdb.Ping(ctx).Result()
 	fmt.Println(pong, err)
+}
+
+func Set(key, value string) {
+	_ = rdb.Set(ctx, key, value, 0).Err()
+}
+
+func init() {
+	redisClient()
 }
