@@ -2,7 +2,6 @@ package redis
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -13,15 +12,12 @@ import (
 var ctx = context.Background()
 var rdb *redis.Client
 
-func redisClient() {
-	rdb = redis.NewClient(&redis.Options{
+func redisClient() *redis.Client {
+	return redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
-
-	pong, err := rdb.Ping(ctx).Result()
-	fmt.Println(pong, err)
 }
 
 func Set(key, value string) {
@@ -29,5 +25,5 @@ func Set(key, value string) {
 }
 
 func init() {
-	redisClient()
+	rdb = redisClient()
 }
