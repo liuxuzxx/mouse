@@ -20,7 +20,7 @@ func redisClient() *redis.Client {
 	})
 }
 
-func Set(key, value string) {
+func Set(key string, value interface{}) {
 	_ = rdb.Set(ctx, key, value, 0).Err()
 }
 

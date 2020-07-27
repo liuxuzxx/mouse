@@ -36,12 +36,13 @@ func PhoneCache() {
 		for index := 0; index < 20000000; index = index + 1 {
 			resultPhone := phoneValue + int64(index)
 			detail := &PhoneNumberDetail{
-				City:   "北京市",
+				City:   "203",
 				Status: 2,
 			}
 
 			//detailJson := jsonDetail(detail)
-			detailJson := stringDetail(detail)
+			//detailJson := stringDetail(detail)
+			detailJson := shareCity(detail)
 			Set(strconv.FormatInt(resultPhone, 10), detailJson)
 			if index%50000 == 0 {
 				endSecond := time.Now().UnixNano()
@@ -56,11 +57,15 @@ func PhoneCache() {
 //
 // 使用JSON的形式存储到Redis当中去，看下消耗的内存的大小
 //
-func jsonDetail(detail *PhoneNumberDetail) string {
+func jsonDetail(detail *PhoneNumberDetail) interface{} {
 	marshalCodes, _ := json.Marshal(detail)
 	return string(marshalCodes)
 }
 
-func stringDetail(detail *PhoneNumberDetail) string {
+func stringDetail(detail *PhoneNumberDetail) interface{} {
 	return detail.City + "-" + strconv.Itoa(int(detail.Status))
+}
+
+func shareCity(detail *PhoneNumberDetail) interface{} {
+	return detail.Status
 }
