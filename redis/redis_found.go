@@ -2,7 +2,6 @@ package redis
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -13,25 +12,18 @@ import (
 var ctx = context.Background()
 var rdb *redis.Client
 
-func redisClient() *redis.Client{
-	rdb = redis.NewClient(&redis.Options{
-		Addr:     "172.16.16.37:6379",
+func redisClient() *redis.Client {
+	return redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
-
-	err := rdb.Set(ctx, "liuxu", "zhongxiaoxia", 0).Err()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println("初始化Redis的客户端对象成功")
-	return rdb
 }
 
-func Set(key,value string){
+func Set(key string, value interface{}) {
 	_ = rdb.Set(ctx, key, value, 0).Err()
 }
 
-func init(){
+func init() {
 	rdb = redisClient()
 }
