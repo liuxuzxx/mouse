@@ -2,8 +2,8 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
-	"time"
 )
 
 //
@@ -25,8 +25,31 @@ func Set(key string, value interface{}) {
 	_ = rdb.Set(ctx, key, value, 0).Err()
 }
 
-func PipelineSet(key string, value interface{}) {
-	rdb.Pipeline().Set(ctx, key, value, time.Duration(0)).Err()
+//
+// Pipeline的速度果然很快，基本速度可到25w/s的写入量,网速基本上顶格到8-9MB的速度了
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:201851939
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:192541394
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:209681272
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:197705737
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:195451363
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:198647618
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:214687613
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:203231755
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:198738337
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:203646099
+//查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:193644458
+// 这个时间是纳秒，纳秒-->微秒-->毫秒 1000进制
+//
+func PipelineSet(data *map[string]interface{}) {
+	pipeline := rdb.Pipeline()
+	for key, value := range *data {
+		pipeline.Set(ctx, key, value, 0)
+	}
+	result, err := pipeline.Exec(ctx)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("查看结果：%T", result)
 }
 
 func init() {
