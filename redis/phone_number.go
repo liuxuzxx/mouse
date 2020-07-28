@@ -33,7 +33,7 @@ func PhoneCache() {
 	startSecond := time.Now().UnixNano()
 	for _, value := range phoneNumberSection["mobile"] {
 		phoneValue := int64(value) * 100000000
-		for index := 0; index < 40000000; index = index + 1 {
+		for index := 0; index < 20000000; index = index + 1 {
 			resultPhone := phoneValue + int64(index)
 			detail := &PhoneNumberDetail{
 				City:   "203",
@@ -43,7 +43,7 @@ func PhoneCache() {
 			//detailJson := jsonDetail(detail)
 			//detailJson := stringDetail(detail)
 			detailJson := shareCity(detail)
-			Set(strconv.FormatInt(resultPhone, 10), detailJson)
+			PipelineSet(strconv.FormatInt(resultPhone, 10), detailJson)
 			if index%50000 == 0 {
 				endSecond := time.Now().UnixNano()
 				fmt.Printf("存储5w个数据，耗费的时间是:%d\n", endSecond-startSecond)
