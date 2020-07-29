@@ -2,7 +2,6 @@ package redis
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -40,16 +39,19 @@ func Set(key string, value interface{}) {
 //查看结果：[]redis.Cmder存储5w个数据，耗费的时间是:193644458
 // 这个时间是纳秒，纳秒-->微秒-->毫秒 1000进制
 //
+// 纳秒数:80014132424
+// 总量是:19950001 差5w到2000w
+// 速度是: 249330.9668632495/s 25w的速度
+//
 func PipelineSet(data *map[string]interface{}) {
 	pipeline := rdb.Pipeline()
 	for key, value := range *data {
 		pipeline.Set(ctx, key, value, 0)
 	}
-	result, err := pipeline.Exec(ctx)
+	_, err := pipeline.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("查看结果：%T", result)
 }
 
 func init() {
