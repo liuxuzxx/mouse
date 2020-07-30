@@ -25,35 +25,35 @@ var phoneNumberSection = map[string][]uint8{
 // 运营商类型可能改变，但是不会太多，所在城市更不用说了，这个基本不会改变，所以我们暂时不存储了
 //
 type PhoneNumberDetail struct {
-	City   string
-	Status uint8
+	Section     int
+	Status      uint8
+	PhoneNumber int
 }
 
 func PhoneCache() {
 	startSecond := time.Now().UnixNano()
-	for _, value := range phoneNumberSection["mobile"] {
-		phoneValue := int64(value) * 100000000
-		data := make(map[string]interface{}, 0)
-		for index := 0; index < 20000000; index = index + 1 {
-			resultPhone := phoneValue + int64(index)
-			detail := &PhoneNumberDetail{
-				City:   "203",
-				Status: 2,
+	for _, phoneValue := range phoneNumberSection["mobile"] {
+		data := make([]PhoneNumberDetail, 0)
+		for index := 0; index < 99999999; index = index + 1 {
+			detail := PhoneNumberDetail{
+				Section:     int(phoneValue),
+				Status:      2,
+				PhoneNumber: index,
 			}
 
 			//detailJson := jsonDetail(detail)
 			//detailJson := stringDetail(detail)
-			detailJson := shareCity(detail)
-			data[strconv.FormatInt(resultPhone, 10)] = detailJson
-			if index%50000 == 0 {
-				PipelineSet(&data)
+			//detailJson := shareCity(detail)
+			data = append(data, detail)
+			if index%100000 == 0 {
+				//PipelineSet(&data)
+				PipelineBitSet(&data)
 				endSecond := time.Now().UnixNano()
-				fmt.Printf("存储5w个数据，耗费的时间是:%d\n", endSecond-startSecond)
+				fmt.Printf("存储%d个数据，耗费的时间是:%d\n", len(data), endSecond-startSecond)
 				startSecond = endSecond
-				data = make(map[string]interface{}, 0)
+				data = make([]PhoneNumberDetail, 0)
 			}
 		}
-		return
 	}
 }
 
@@ -66,7 +66,7 @@ func jsonDetail(detail *PhoneNumberDetail) interface{} {
 }
 
 func stringDetail(detail *PhoneNumberDetail) interface{} {
-	return detail.City + "-" + strconv.Itoa(int(detail.Status))
+	return strconv.Itoa(int(detail.Status))
 }
 
 func shareCity(detail *PhoneNumberDetail) interface{} {

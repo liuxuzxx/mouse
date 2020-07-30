@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"strconv"
 )
 
 //
@@ -15,7 +16,7 @@ var rdb *redis.Client
 
 func redisClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
-		Addr:     "172.16.16.37:6379",
+		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
@@ -50,6 +51,23 @@ func PipelineSet(data *map[string]interface{}) {
 		panic(err)
 	}
 	fmt.Printf("查看结果：%T", result)
+}
+
+func PipelineBitSet(data *[]PhoneNumberDetail) {
+	pipeline := rdb.Pipeline()
+	step := 5
+	for _, value := range *data {
+		key := value.Section
+		offset := value.PhoneNumber
+		status := value.Status
+		pipeline.SetBit(ctx, strconv.Itoa(key), int64(offset*step), 1)
+
+		for index := 0; index < 4; index = index + 1 {
+			bitValue := status >> index & 1
+			pipeline.SetBit(ctx, strconv.Itoa(key), int64(offset*step+1+index), int(bitValue))
+		}
+	}
+	_, _ = pipeline.Exec(ctx)
 }
 
 func init() {
