@@ -32,17 +32,13 @@ type PhoneNumberDetail struct {
 
 func PhoneCache() {
 	sectionChannel := make(chan uint8, 0)
-	go fillSection(sectionChannel)
 	go doPhoneCache(sectionChannel)
-}
-
-func fillSection(sectionChannel chan uint8) {
 	for _, value := range phoneNumberSection {
 		for _, section := range value {
 			sectionChannel <- section
 		}
 	}
-	close(sectionChannel)
+	<-sectionChannel
 }
 
 func doPhoneCache(sectionChannel chan uint8) {
@@ -53,7 +49,7 @@ func doPhoneCache(sectionChannel chan uint8) {
 }
 
 func funcName(phoneValue uint8) {
-	fmt.Printf("开始存放到redis缓存:%d", phoneValue)
+	fmt.Printf("开始存放到redis缓存:%d\n", phoneValue)
 	data := make([]PhoneNumberDetail, 0)
 	start := time.Now().UnixNano()
 	for index := 0; index < 99999999; index = index + 1 {
@@ -66,7 +62,7 @@ func funcName(phoneValue uint8) {
 		if index%100000 == 0 {
 			PipelineBitSet(&data)
 			end := time.Now().UnixNano()
-			fmt.Printf("数据量:%d 耗费时间为:%d", len(data), end-start)
+			fmt.Printf("数据量:%d 耗费时间为:%d\n", len(data), end-start)
 			start = end
 			data = make([]PhoneNumberDetail, 0)
 		}
