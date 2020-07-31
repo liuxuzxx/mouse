@@ -31,28 +31,44 @@ type PhoneNumberDetail struct {
 }
 
 func PhoneCache() {
-	startSecond := time.Now().UnixNano()
-	for _, phoneValue := range phoneNumberSection["mobile"] {
-		data := make([]PhoneNumberDetail, 0)
-		for index := 0; index < 99999999; index = index + 1 {
-			detail := PhoneNumberDetail{
-				Section:     int(phoneValue),
-				Status:      2,
-				PhoneNumber: index,
-			}
+	sectionChannel := make(chan uint8, 0)
+	go fillSection(sectionChannel)
+	go doPhoneCache(sectionChannel)
+}
 
-			//detailJson := jsonDetail(detail)
-			//detailJson := stringDetail(detail)
-			//detailJson := shareCity(detail)
-			data = append(data, detail)
-			if index%100000 == 0 {
-				//PipelineSet(&data)
-				PipelineBitSet(&data)
-				endSecond := time.Now().UnixNano()
-				fmt.Printf("存储%d个数据，耗费的时间是:%d\n", len(data), endSecond-startSecond)
-				startSecond = endSecond
-				data = make([]PhoneNumberDetail, 0)
-			}
+func fillSection(sectionChannel chan uint8) {
+	for _, value := range phoneNumberSection {
+		for _, section := range value {
+			sectionChannel <- section
+		}
+	}
+	close(sectionChannel)
+}
+
+func doPhoneCache(sectionChannel chan uint8) {
+	for section := range sectionChannel {
+		go funcName(section)
+	}
+	close(sectionChannel)
+}
+
+func funcName(phoneValue uint8) {
+	fmt.Printf("开始存放到redis缓存:%d", phoneValue)
+	data := make([]PhoneNumberDetail, 0)
+	start := time.Now().UnixNano()
+	for index := 0; index < 99999999; index = index + 1 {
+		detail := PhoneNumberDetail{
+			Section:     int(phoneValue),
+			Status:      2,
+			PhoneNumber: index,
+		}
+		data = append(data, detail)
+		if index%100000 == 0 {
+			PipelineBitSet(&data)
+			end := time.Now().UnixNano()
+			fmt.Printf("数据量:%d 耗费时间为:%d", len(data), end-start)
+			start = end
+			data = make([]PhoneNumberDetail, 0)
 		}
 	}
 }
