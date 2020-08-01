@@ -15,7 +15,7 @@ var rdb *redis.Client
 
 func redisClient() *redis.Client {
 	return redis.NewClient(&redis.Options{
-		Addr:     "172.16.16.37:6379",
+		Addr:     "localhost:6379",
 		Password: "",
 		DB:       0,
 	})
@@ -62,12 +62,7 @@ func PipelineBitSet(data *[]PhoneNumberDetail) {
 		key := value.Section
 		offset := value.PhoneNumber
 		status := value.Status
-		pipeline.SetBit(ctx, strconv.Itoa(key), int64(offset*step), 1)
-
-		for index := 0; index < 4; index = index + 1 {
-			bitValue := status >> index & 1
-			pipeline.SetBit(ctx, strconv.Itoa(key), int64(offset*step+1+index), int(bitValue))
-		}
+		pipeline.BitField(ctx, strconv.Itoa(key), "set", "u5", int64(offset*step), 1<<4+status)
 	}
 	_, _ = pipeline.Exec(ctx)
 }
