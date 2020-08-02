@@ -14,6 +14,10 @@ go build main.go 是编译成所在系统的可执行文件
 go clean 类似于mvn clean，就是清除已经编译好的可执行的文件一类的东西
 */
 func main() {
+	redis.ConvertToMD5()
+}
+
+func redisFound(){
 	redis.PhoneCache()
 }
 

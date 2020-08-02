@@ -13,6 +13,8 @@ import (
 // 在数据结构当中有那么一句话space trade off time
 //　就是所谓的时间和空间的交换工作
 //
+// 45亿的号码，大概是半个小时存储完毕，也就是一秒是200w的存储命令执行，当然是使用了pipeline管道了！
+//
 
 var phoneNumberSection = map[string][]uint8{
 	"mobile":  {139, 138, 137, 136, 135, 134, 147, 150, 151, 152, 157, 158, 159, 172, 178, 182, 183, 184, 187, 188, 198},
@@ -56,7 +58,7 @@ func doPhoneCache(section uint8) {
 			PhoneNumber: index,
 		}
 		data = append(data, detail)
-		if index%100000 == 0 {
+		if index%500000 == 0 {
 			PipelineBitSet(&data)
 			end := time.Now().UnixNano()
 			fmt.Printf("数据量:%d 耗费时间为:%d\n", index, end-start)
