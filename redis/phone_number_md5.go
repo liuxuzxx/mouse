@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"hash/fnv"
+	"os"
 	"strconv"
 )
 
@@ -28,19 +29,38 @@ func convertToMD5Bytes(phoneNumber int64) [md5.Size]byte {
 //
 
 func PhoneNumberMD5() {
+	ch := make(chan struct{})
+	for _, value := range phoneNumberSection {
+		for _, section := range value {
+			go func(section uint8) {
+				doPhoneNumberMD5Slot(section)
+				ch <- struct{}{}
+			}(section)
+		}
+		for range value {
+			<-ch
+		}
+	}
+}
+
+func doPhoneNumberMD5Slot(section uint8) {
+	slotNumber := 1 << 20
 	hash := fnv.New32()
-	section := 13900000000
-	data := make(map[string]interface{})
+	basicNumber := int(section) * 100000000
+	slotStatistics := make(map[uint32]int)
 	for index := 0; index < 100000000; index = index + 1 {
-		phoneNumber := section + index
+		phoneNumber := basicNumber + index
 		md5Value := convertToMD5(int64(phoneNumber))
 		_, _ = hash.Write([]byte(md5Value))
-		hashValue := hash.Sum32()
-		data[strconv.FormatInt(int64(hashValue), 10)] = strconv.Itoa(phoneNumber)
-		if index%10000 == 0 {
-			PipelineSet(&data)
-			fmt.Printf("存储了:%d\n", index)
-			data = make(map[string]interface{})
-		}
+		hashValue := hash.Sum32() % uint32(slotNumber)
+		slotStatistics[hashValue] = slotStatistics[hashValue] + 1
+	}
+	file, err := os.Create(fmt.Sprintf("/home/liuxu/Documents/slot-%d",section))
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+	for index, value := range slotStatistics {
+		_, _ = file.WriteString(fmt.Sprintf("slot:%d,count:%d\n", index, value))
 	}
 }
