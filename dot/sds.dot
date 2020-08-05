@@ -1,0 +1,31 @@
+digraph sds {
+    size = "4 * 4";
+
+    APP [shape=box];
+    APP -> "sds-app";
+    Web -> "sds-web";
+    Application -> "sds-command";
+    CarHard -> "sds-car-hard";
+
+    "sds-app" -> "spring-cloud";
+    "sds-web" -> "spring-cloud";
+    "sds-command" -> "spring-cloud";
+    "sds-car-hard" -> "spring-cloud";
+
+    "spring-cloud" [shape=polygon,sides=6,peripheries=2,color=green,style=filled];
+
+    "spring-cloud" -> "sds-server-1" -> "Redis Cluster";
+    "spring-cloud" -> "sds-server-2" -> "Redis Cluster";
+    "spring-cloud" -> "sds-server-3" -> "Redis Cluster";
+    "spring-cloud" -> "sds-server-..." -> "Redis Cluster";
+
+    "sds-server-1" -> "DB-Share";
+    "sds-server-2" -> "DB-Share";
+    "sds-server-3" -> "DB-Share";
+    "sds-server-..." -> "DB-Share";
+    "DB-Share" -> "MySQL-1" [style=dotted,color=red];
+    "DB-Share" -> "MySQL-2" [style=dotted,color=red];
+    "DB-Share" -> "MySQL-3" [style=dotted,color=red];
+    "DB-Share" -> "MySQL-4" [style=dotted,color=red];
+    "DB-Share" -> "MySQL-..." [style=dotted,color=red];
+}

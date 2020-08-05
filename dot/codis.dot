@@ -1,0 +1,5 @@
+digraph codis {
+    A -> B
+    B -> C
+    C -> D[label="服务节点"]
+}
