@@ -55,7 +55,7 @@ func doPhoneNumberMD5Slot(section uint8) {
 		hashValue := hash.Sum32() % uint32(slotNumber)
 		slotStatistics[hashValue] = slotStatistics[hashValue] + 1
 	}
-	file, err := os.Create(fmt.Sprintf("/home/liuxu/Documents/slot-%d",section))
+	file, err := os.Create(fmt.Sprintf("/home/liuxu/Documents/slot-%d", section))
 	if err != nil {
 		panic(err)
 	}

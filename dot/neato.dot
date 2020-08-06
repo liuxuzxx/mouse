@@ -1,0 +1,7 @@
+graph ring {
+    node0 [pos="0,0!"];
+    node1 [pos="1,1!"];
+    node2 [pos="0,1!"];
+    node3 [pos="1,0!"];
+    node0 -- node1 -- node2 -- node3 -- node0;
+}
