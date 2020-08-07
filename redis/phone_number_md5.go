@@ -11,6 +11,8 @@ import (
 //
 // 这次实验的是存储号码和他的MD5映射关系
 //
+var slotNumber = 1 << 15
+var hashFunc = fnv.New32()
 
 func convertToMD5(phoneNumber int64) string {
 	sum := md5.Sum([]byte(strconv.FormatInt(phoneNumber, 10)))
@@ -32,9 +34,9 @@ func PhoneNumberMD5() {
 	ch := make(chan struct{})
 	for _, section := range sections {
 		go func(section uint8) {
-			//doPhoneNumberMD5Slot(section)
+			doPhoneNumberMD5Slot(section)
 			//doPhoneNumberMD5File(section)
-			doFetchList(section)
+			//doFetchList(section)
 			ch <- struct{}{}
 		}(section)
 	}
@@ -44,14 +46,10 @@ func PhoneNumberMD5() {
 }
 
 func doFetchList(section uint8) {
-	slotNumber := 1 << 15
 	basicNumber := int(section) * 100000000
-	hash := fnv.New32()
 	for index := 0; index < 100000000; index = index + 1 {
 		phoneNumber := basicNumber + index
-		md5Value := convertToMD5(int64(phoneNumber))
-		_, _ = hash.Write([]byte(md5Value))
-		hashValue := hash.Sum32() % uint32(slotNumber)
+		hashValue := hashValue(phoneNumber)
 		key := fmt.Sprintf("%s_%s", strconv.Itoa(int(section)), strconv.FormatUint(uint64(hashValue), 10))
 		number := searchPhoneNumber(key, index)
 		if number == -1 {
@@ -64,15 +62,12 @@ func doFetchList(section uint8) {
 }
 
 func doPhoneNumberMD5Slot(section uint8) {
-	slotNumber := 1 << 15
-	hash := fnv.New32()
+
 	basicNumber := int(section) * 100000000
 	slotStatistics := make(map[string]interface{}, 50000)
 	for index := 0; index < 100000000; index = index + 1 {
 		phoneNumber := basicNumber + index
-		md5Value := convertToMD5(int64(phoneNumber))
-		_, _ = hash.Write([]byte(md5Value))
-		hashValue := hash.Sum32() % uint32(slotNumber)
+		hashValue := hashValue(phoneNumber)
 		key := fmt.Sprintf("%s_%s", strconv.Itoa(int(section)), strconv.FormatUint(uint64(hashValue), 10))
 		slotStatistics[key] = strconv.Itoa(index)
 		if index%50000 == 0 {
@@ -81,6 +76,13 @@ func doPhoneNumberMD5Slot(section uint8) {
 			fmt.Printf("已经存储了:%d\n", index)
 		}
 	}
+}
+
+func hashValue(phoneNumber int) uint32 {
+	md5Value := convertToMD5(int64(phoneNumber))
+	_, _ = hashFunc.Write([]byte(md5Value))
+	hashValue := hashFunc.Sum32() % uint32(slotNumber)
+	return hashValue
 }
 
 func doPhoneNumberMD5File(section uint8) {
