@@ -30,20 +30,60 @@ func convertToMD5Bytes(phoneNumber int64) [md5.Size]byte {
 
 func PhoneNumberMD5() {
 	ch := make(chan struct{})
-	for _, value := range phoneNumberSection {
-		for _, section := range value {
-			go func(section uint8) {
-				doPhoneNumberMD5Slot(section)
-				ch <- struct{}{}
-			}(section)
+	for _, section := range sections {
+		go func(section uint8) {
+			//doPhoneNumberMD5Slot(section)
+			//doPhoneNumberMD5File(section)
+			doFetchList(section)
+			ch <- struct{}{}
+		}(section)
+	}
+	for range sections {
+		<-ch
+	}
+}
+
+func doFetchList(section uint8) {
+	slotNumber := 1 << 15
+	basicNumber := int(section) * 100000000
+	hash := fnv.New32()
+	for index := 0; index < 100000000; index = index + 1 {
+		phoneNumber := basicNumber + index
+		md5Value := convertToMD5(int64(phoneNumber))
+		_, _ = hash.Write([]byte(md5Value))
+		hashValue := hash.Sum32() % uint32(slotNumber)
+		key := fmt.Sprintf("%s_%s", strconv.Itoa(int(section)), strconv.FormatUint(uint64(hashValue), 10))
+		number := searchPhoneNumber(key, index)
+		if number == -1 {
+			fmt.Printf("查找失败:%d,%s\n", index, key)
 		}
-		for range value {
-			<-ch
+		if index%10000 == 0 {
+			fmt.Printf("查找了数据:%d\n", index)
 		}
 	}
 }
 
 func doPhoneNumberMD5Slot(section uint8) {
+	slotNumber := 1 << 15
+	hash := fnv.New32()
+	basicNumber := int(section) * 100000000
+	slotStatistics := make(map[string]interface{}, 50000)
+	for index := 0; index < 100000000; index = index + 1 {
+		phoneNumber := basicNumber + index
+		md5Value := convertToMD5(int64(phoneNumber))
+		_, _ = hash.Write([]byte(md5Value))
+		hashValue := hash.Sum32() % uint32(slotNumber)
+		key := fmt.Sprintf("%s_%s", strconv.Itoa(int(section)), strconv.FormatUint(uint64(hashValue), 10))
+		slotStatistics[key] = strconv.Itoa(index)
+		if index%50000 == 0 {
+			PipelineList(&slotStatistics)
+			slotStatistics = make(map[string]interface{}, 50000)
+			fmt.Printf("已经存储了:%d\n", index)
+		}
+	}
+}
+
+func doPhoneNumberMD5File(section uint8) {
 	slotNumber := 1 << 20
 	hash := fnv.New32()
 	basicNumber := int(section) * 100000000

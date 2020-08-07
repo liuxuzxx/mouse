@@ -1,0 +1,6 @@
+digraph nginx {
+    nginx -> "node-1";
+    nginx -> "node-2"
+    nginx -> "node-3";
+    nginx -> "node-...";
+}

@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"strconv"
 )
@@ -65,6 +66,45 @@ func PipelineBitSet(data *[]PhoneNumberDetail) {
 		pipeline.BitField(ctx, strconv.Itoa(key), "set", "u5", int64(offset*step), 1<<4+status)
 	}
 	_, _ = pipeline.Exec(ctx)
+}
+
+func PipelineList(data *map[string]interface{}) {
+	pipeline := rdb.Pipeline()
+	for key, value := range *data {
+		pipeline.LPush(ctx, key, value)
+	}
+	_, _ = pipeline.Exec(ctx)
+}
+
+func Get(key string) *redis.StringSliceCmd {
+	return rdb.LRange(ctx, key, 0, -1)
+}
+
+func searchPhoneNumber(key string, number int) int {
+	end, _ := rdb.LLen(ctx, key).Result()
+	start := int64(0)
+	return binarySearch(key, number, start, end)
+}
+
+func binarySearch(key string, number int, start, end int64) int {
+	for start <= end {
+		middle := (end + start) / 2
+		binaryResult, _ := rdb.LRange(ctx, key, middle, middle).Result()
+		if len(binaryResult) == 0 {
+			fmt.Printf("查看错误数据信息:%s,%d,%d  分割信息", key, middle, number)
+		}
+		phoneNumber, _ := strconv.Atoi(binaryResult[0])
+		if phoneNumber > number {
+			start = middle + 1
+			binarySearch(key, number, start, end)
+		} else if phoneNumber < number {
+			end = middle - 1
+			binarySearch(key, number, start, end)
+		} else {
+			return phoneNumber
+		}
+	}
+	return -1
 }
 
 func init() {
