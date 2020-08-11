@@ -47,7 +47,7 @@ import "fmt"
 //之后，会弹出，然后执行上一个压栈的，可以理解为{[]}这种匹配方式
 
 func ValidParentheses() {
-	parentheses := "([{]})"
+	parentheses := "(){}[]s"
 	flag := doParentheses(parentheses)
 	fmt.Print(flag)
 }
@@ -80,6 +80,7 @@ func (s *Stack) push(parentheses byte) {
 
 func (s *Stack) pop() {
 	s.currentIndex = s.currentIndex - 1
+	s.content = s.content[0:s.currentIndex]
 }
 
 func (s *Stack) compare(parentheses byte) {
@@ -89,7 +90,7 @@ func (s *Stack) compare(parentheses byte) {
 	}
 	minNumber := parentheses - s.content[s.currentIndex-1]
 	if minNumber > 0 && minNumber < 3 {
-		s.currentIndex = s.currentIndex - 1
+		s.pop()
 	} else {
 		s.push(parentheses)
 	}
