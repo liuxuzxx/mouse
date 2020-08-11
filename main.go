@@ -8,17 +8,18 @@ import (
 )
 
 /**
- 还是需要紧跟语言啊，毕竟，语言挺重要，是表达的唯一途径
-go run main.go 是运行
-go build main.go 是编译成所在系统的可执行文件
-go clean 类似于mvn clean，就是清除已经编译好的可执行的文件一类的东西
-*/
+ * 还是需要紧跟语言啊，毕竟，语言挺重要，是表达的唯一途径
+ * go run main.go 是运行
+ * go build main.go 是编译成所在系统的可执行文件
+ * go clean 类似于mvn clean，就是清除已经编译好的可执行的文件一类的东西
+ */
 func main() {
-	redis.PhoneNumberMD5()
+	leetcode.ValidParentheses()
 }
 
 func redisFound() {
 	redis.PhoneCache()
+	redis.PhoneNumberMD5()
 }
 
 func goBook() {
@@ -68,6 +69,5 @@ func leetCode() {
 	leetcode.LetterCombinationsOfAPhoneNumber()
 	leetcode.FourSum()
 	leetcode.RemoteNthNodeFromEndOfList(2)
-	leetcode.ValidParentheses()
 	leetcode.ValidParentheses()
 }
