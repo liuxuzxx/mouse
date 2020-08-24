@@ -1,0 +1,3 @@
+server:
+  host: 172.16.16.46:9999
+  name: Rattrap-Distribution-Server
