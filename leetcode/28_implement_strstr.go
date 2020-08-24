@@ -1,5 +1,7 @@
 package leetcode
 
+import "fmt"
+
 //28. Implement strStr()
 //Easy
 //
@@ -36,9 +38,31 @@ package leetcode
 //
 
 func StrStr() {
-
+	haystack := "hello"
+	needle := "ll"
+	result := doStrStr(haystack, needle)
+	fmt.Printf("查看结果未知:%d\n", result)
 }
 
 func doStrStr(haystack string, needle string) int {
-	return -1
+	if len(needle) == 0 || len(haystack) == 0 {
+		return -1
+	}
+	needleByte := []byte(needle)
+	haystackByte := []byte(haystack)
+	count := -1
+	for index, value := range haystackByte {
+		if value == needleByte[0] {
+			count = index
+		}
+		for i := 1; i < len(needleByte); i = i + 1 {
+			if haystackByte[index+i] != needleByte[i] {
+				count = -1
+			}
+		}
+		if count != -1 {
+			break
+		}
+	}
+	return count
 }

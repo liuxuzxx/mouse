@@ -14,7 +14,7 @@ import (
  * go clean 类似于mvn clean，就是清除已经编译好的可执行的文件一类的东西
  */
 func main() {
-	leetcode.RemoveElements()
+	leetcode.StrStr()
 }
 
 func redisFound() {
@@ -77,4 +77,5 @@ func leetCode() {
 	leetcode.ReverseKNodesGroup()
 	leetcode.RemoveDuplicateNumber()
 	leetcode.RemoveElements()
+	leetcode.StrStr()
 }
