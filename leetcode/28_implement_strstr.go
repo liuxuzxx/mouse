@@ -38,31 +38,32 @@ import "fmt"
 //
 
 func StrStr() {
-	haystack := "hello"
-	needle := "ll"
+	haystack := ""
+	needle := ""
 	result := doStrStr(haystack, needle)
 	fmt.Printf("查看结果未知:%d\n", result)
 }
 
 func doStrStr(haystack string, needle string) int {
-	if len(needle) == 0 || len(haystack) == 0 {
-		return -1
-	}
-	needleByte := []byte(needle)
-	haystackByte := []byte(haystack)
-	count := -1
-	for index, value := range haystackByte {
-		if value == needleByte[0] {
-			count = index
-		}
-		for i := 1; i < len(needleByte); i = i + 1 {
-			if haystackByte[index+i] != needleByte[i] {
-				count = -1
-			}
-		}
-		if count != -1 {
-			break
+	needleRunes := []rune(needle)
+	haystackRunes := []rune(haystack)
+	needleLength := len(needleRunes)
+	haystackLength := len(haystackRunes)
+	for index := 0; index <= haystackLength-needleLength; index = index + 1 {
+		if compareStr(needleRunes, haystackRunes, index) {
+			return index
+		} else {
+			continue
 		}
 	}
-	return count
+	return -1
+}
+
+func compareStr(source, target []rune, index int) bool {
+	for i := 0; i < len(source); i = i + 1 {
+		if source[i] != target[index+i] {
+			return false
+		}
+	}
+	return true
 }
