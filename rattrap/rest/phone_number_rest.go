@@ -4,6 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"mouse/rattrap/common"
 	"mouse/rattrap/request"
+	"mouse/rattrap/service"
 )
 
 //
@@ -11,7 +12,7 @@ import (
 //
 
 func PhoneDetection(ctx iris.Context) {
-	var numbers request.PhoneDetectionRequest
-	_ = ctx.ReadJSON(&numbers)
-	ctx.JSON(common.Success(numbers))
+	var number request.PhoneDetectionRequest
+	_ = ctx.ReadJSON(&number)
+	_, _ = ctx.JSON(common.Success(service.PhoneDetectionServiceImpl.Detection(number)))
 }
