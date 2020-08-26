@@ -41,23 +41,22 @@ import "fmt"
 //
 
 func DivideTwoIntegers() {
-	dividend := 8
-	divisor := 2
+	dividend := -2147483648
+	divisor := -1
 	result := doDivideTwoIntegers(dividend, divisor)
 	fmt.Printf("%d/%d=%d\n", dividend, divisor, result)
 }
 
 func doDivideTwoIntegers(dividend int, divisor int) int {
-	absDividend := abs(dividend)
-	absDivisor := abs(divisor)
-	quotient := 0
-	for index := 31; index >= 0; index = index - 1 {
-		if (absDividend >> index) >= absDivisor {
-			quotient = quotient + 1<<index
-		}
+	left := abs(dividend)
+	right := abs(divisor)
+	result := 0
+	for left >= right {
+		left = left - right
+		result = result + 1
 	}
-	if dividend^divisor < 0 {
-		return -quotient
+	if dividend^divisor >= 0 {
+		return result
 	}
-	return quotient
+	return -result
 }
