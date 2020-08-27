@@ -48,16 +48,10 @@ func DivideTwoIntegers() {
 }
 
 func doDivideTwoIntegers(dividend int, divisor int) int {
-	absDividend := abs(dividend)
-	absDivisor := abs(divisor)
-	quotient := 0
+	left := abs(dividend)
+	right := abs(divisor)
+	result := 0
 	for index := 31; index >= 0; index = index - 1 {
-		if (absDividend >> index) >= absDivisor {
-			quotient = quotient + 1<<index
-		}
+
 	}
-	if dividend^divisor < 0 {
-		return -quotient
-	}
-	return quotient
 }

@@ -1,6 +1,8 @@
 package mq
 
-import "time"
+import (
+	"time"
+)
 
 type PhoneDetectionMessage struct {
 	UserId     int       `json:"userId"`

@@ -2,10 +2,16 @@ server:
   host: 172.16.16.46:9999
   name: Rattrap-Distribution-Server
 rocketMQ:
-  NameServer: 172.16.16.37:9876
-  GroupName: rattrap-mq
+  nameServer: 172.16.16.37:9876
+  groupName: rattrap-mq
+  consumerGroupName: consumer-rattrap-mq
 database:
   host: 172.16.16.46
   port: 15432
-  userName: root
-  password: root
+  userName: rattrap
+  password: rattrap123456
+  dbName: rattrap
+redis:
+  address: 127.0.0.1:6379
+  password: ""
+  db: 0

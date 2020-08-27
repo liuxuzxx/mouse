@@ -1,8 +1,7 @@
 package request
 
 import (
-	"github.com/google/uuid"
-	"strconv"
+	uuid "github.com/iris-contrib/go.uuid"
 )
 
 type PhoneDetectionRequest struct {
@@ -16,7 +15,7 @@ type PhoneDetectionRemoteRequest struct {
 
 func (p *PhoneDetectionRequest) Convert() PhoneDetectionRemoteRequest {
 	return PhoneDetectionRemoteRequest{
-		Uuid:   strconv.Itoa(uuid.ClockSequence()),
+		Uuid:   uuid.Must(uuid.NewV4()).String(),
 		Phones: []int64{p.Number},
 	}
 }

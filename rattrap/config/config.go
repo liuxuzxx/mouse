@@ -10,6 +10,7 @@ type Config struct {
 	Server   Server
 	RocketMQ RocketMQ
 	Database Database
+	Redis    Redis
 }
 
 type Server struct {
@@ -18,8 +19,9 @@ type Server struct {
 }
 
 type RocketMQ struct {
-	NameServer []string
-	GroupName  string
+	NameServer        []string
+	GroupName         string
+	ConsumerGroupName string
 }
 
 type Database struct {
@@ -27,6 +29,13 @@ type Database struct {
 	Port     int
 	Username string
 	Password string
+	DbName   string
+}
+
+type Redis struct {
+	Address  string
+	Password string
+	Db       int
 }
 
 var Conf Config

@@ -1,6 +1,11 @@
 package response
 
-import "time"
+import (
+	"math/rand"
+	"mouse/rattrap/dto"
+	"mouse/rattrap/mq"
+	"time"
+)
 
 type PhoneDetectionResponse struct {
 	Result Result `json:"result"`
@@ -8,12 +13,33 @@ type PhoneDetectionResponse struct {
 }
 
 type Result struct {
+	UserId      int       `json:"userId"`
 	PhoneStatus int       `json:"phoneStatus"`
 	Carrier     int       `json:"carrier"`
 	Phone       int64     `json:"phone"`
 	Province    string    `json:"province"`
 	City        string    `json:"city"`
 	CreateTime  time.Time `json:"createTime"`
+}
+
+func (p *PhoneDetectionResponse) ConvertMessage() mq.PhoneDetectionMessage {
+	return mq.PhoneDetectionMessage{
+		UserId:     p.Result.UserId,
+		Number:     p.Result.Phone,
+		Status:     p.Result.PhoneStatus,
+		CreateDate: time.Time{},
+	}
+}
+
+func (p *PhoneDetectionResponse) ConvertDto() dto.PhoneNumberDetectionDto {
+	return dto.PhoneNumberDetectionDto{
+		UserId:      p.Result.UserId,
+		BatchId:     p.Uuid,
+		PhoneNumber: p.Result.Phone,
+		Status:      p.Result.PhoneStatus,
+		CreateTime:  p.Result.CreateTime,
+		UpdateTime:  p.Result.CreateTime,
+	}
 }
 
 type PhoneDetectionRemoteResponse struct {
@@ -37,6 +63,7 @@ type PhoneResult struct {
 
 func (r *PhoneResult) convert() Result {
 	return Result{
+		UserId:      rand.Intn(100) + 1,
 		PhoneStatus: r.PhoneStatus,
 		Carrier:     r.Carrier,
 		Phone:       r.Phone,
@@ -55,4 +82,8 @@ func (p *PhoneDetectionRemoteResponse) Convert() PhoneDetectionResponse {
 		Result: result[0],
 		Uuid:   p.Data.Uuid,
 	}
+}
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
 }
