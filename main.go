@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"mouse/book"
 	"mouse/leetcode"
-	_ "mouse/rattrap"
 	"mouse/redis"
 )
 
@@ -15,11 +14,7 @@ import (
  * go clean 类似于mvn clean，就是清除已经编译好的可执行的文件一类的东西
  */
 func main() {
-	rattrap()
-}
-
-func rattrap() {
-
+	leetcode.DivideTwoIntegers()
 }
 
 func redisFound() {

@@ -13,6 +13,10 @@ import (
 //
 
 func init() {
+	start()
+}
+
+func start() {
 	log.Println("Init Iris web server!")
 	app := iris.New()
 	app = route(app)

@@ -18,7 +18,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"time"
 )
 
 const (
@@ -62,9 +61,8 @@ func (p *PhoneDetectionService) messageQueue(detectionResponse response.PhoneDet
 }
 
 func (p *PhoneDetectionService) remoteDetection(request request.PhoneDetectionRemoteRequest) response.PhoneDetectionRemoteResponse {
-	client := &http.Client{Timeout: 5 * time.Second}
 	jsonStr, _ := json.Marshal(request)
-	resp, err := client.Post(url, contentType, bytes.NewBuffer(jsonStr))
+	resp, err := http.Post(url, contentType, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		log.Println("访问出现错误了...")
 		panic(err)
@@ -123,6 +121,10 @@ func (p *PhoneDetectionConsumer) initPushConsumer() {
 var PhoneDetectionServiceImpl PhoneDetectionService
 
 func init() {
+	start()
+}
+
+func start() {
 	var tag = "phone-detection-api"
 	PhoneDetectionServiceImpl = PhoneDetectionService{
 		tag: tag,
@@ -132,4 +134,5 @@ func init() {
 		tag: tag,
 	}
 	phoneDetectionConsumer.initPushConsumer()
+	http.DefaultTransport.(*http.Transport).MaxIdleConnsPerHost = 100
 }
