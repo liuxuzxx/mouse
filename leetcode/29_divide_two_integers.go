@@ -1,6 +1,8 @@
 package leetcode
 
-import "fmt"
+import (
+	"fmt"
+)
 
 //29. Divide Two Integers
 //Medium
@@ -38,25 +40,43 @@ import "fmt"
 //这个其实就是在考除法的概念,我们暂时定义余数为正余数，不考虑负余数的情况
 // 使用辗转相除法就可以了,或者是从计算机的角度来看到加减乘除的做法的规则实现
 // 我的做法不是计算机的真正的做法，是数学的做法
-//
+//查找的思想简直就是无处不在啊，当你使用查找的思想的时候，真的是柳暗花明又一村的思想啊
 
 func DivideTwoIntegers() {
 	dividend := -2147483648
 	divisor := -1
 	result := doDivideTwoIntegers(dividend, divisor)
-	fmt.Printf("%d/%d=%d\n", dividend, divisor, int32(result))
+	fmt.Printf("%d/%d=%d\n", dividend, divisor, result)
 }
 
 func doDivideTwoIntegers(dividend int, divisor int) int {
 	left := abs(dividend)
 	right := abs(divisor)
 	result := 0
+
 	for left >= right {
-		left = left - right
-		result = result + 1
+		count := 0
+		temp := right
+		for left >= temp {
+			left = left - temp
+			result = result + 1<<count
+			temp = temp << 1
+			count = count + 1
+		}
 	}
+
+	leftBoundary := -1 << 31
+	rightBoundary := 1<<31 - 1
 	if dividend^divisor >= 0 {
+		if result > rightBoundary {
+			return rightBoundary
+		}
 		return result
 	}
-	return -result
+	result = -result
+	if result < leftBoundary {
+		return leftBoundary
+	} else {
+		return result
+	}
 }
