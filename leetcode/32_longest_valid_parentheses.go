@@ -33,17 +33,39 @@ import (
 // ( 40 ) 41
 
 func LongestValidParentheses() {
-	source := "()(()"
+	source := "(()" //")()())"
 	result := doLongestValidParentheses(source)
 	fmt.Printf("结果是:%d\n", result)
 }
 
 func doLongestValidParentheses(source string) int {
 	stack := ParenthesesStack{
-		elements:     make([]int, 0),
+		elements:     make([]int, len(source)),
 		currentIndex: 0,
 	}
-
+	maxLength := 0
+	last := -1
+	for index, value := range source {
+		if value == 40 {
+			stack.push(index)
+		} else {
+			if stack.empty() {
+				last = index
+			} else {
+				stack.pop()
+				tempLength := 0
+				if stack.empty() {
+					tempLength = index - last
+				} else {
+					tempLength = index - stack.peek()
+				}
+				if tempLength > maxLength {
+					maxLength = tempLength
+				}
+			}
+		}
+	}
+	return maxLength
 }
 
 type ParenthesesStack struct {
@@ -52,8 +74,12 @@ type ParenthesesStack struct {
 }
 
 func (p *ParenthesesStack) push(element int) {
-	p.elements = append(p.elements, element)
+	p.elements[p.currentIndex] = element
 	p.currentIndex = p.currentIndex + 1
+}
+
+func (p *ParenthesesStack) empty() bool {
+	return p.currentIndex <= 0
 }
 
 func (p *ParenthesesStack) pop() (int, error) {
@@ -62,4 +88,8 @@ func (p *ParenthesesStack) pop() (int, error) {
 		return p.elements[p.currentIndex], nil
 	}
 	return -1, errors.New("越界了")
+}
+
+func (p *ParenthesesStack) peek() int {
+	return p.elements[p.currentIndex-1]
 }
