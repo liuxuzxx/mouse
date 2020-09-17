@@ -14,7 +14,7 @@ import (
  * go clean 类似于mvn clean，就是清除已经编译好的可执行的文件一类的东西
  */
 func main() {
-	leetcode.LongestValidParentheses()
+	leetcode.FindFirstAndLastPosition()
 }
 
 func redisFound() {
@@ -81,4 +81,6 @@ func leetCode() {
 	leetcode.DivideTwoIntegers()
 	leetcode.SubstringConcatenationAllWords()
 	leetcode.LongestValidParentheses()
+	leetcode.SearchInRotatedSortedArray()
+	leetcode.FindFirstAndLastPosition()
 }

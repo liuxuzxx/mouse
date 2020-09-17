@@ -1,5 +1,7 @@
 package leetcode
 
+import "fmt"
+
 //33. Search in Rotated Sorted Array
 //Medium
 //
@@ -41,28 +43,46 @@ package leetcode
 //-10^4 <= target <= 10^4
 
 func SearchInRotatedSortedArray() {
-
+	numbers := []int{80, 200, 230, 420, 561, 0, 3, 7, 11, 13, 15}
+	target := 0
+	result := doSearchInRotatedSortedArray(&numbers, target)
+	fmt.Printf("查看搜搜结果:%d\n", result)
 }
 
-func doSearchInRotatedSortedArray(numbers []int, target int) int {
+func doSearchInRotatedSortedArray(numberPointer *[]int, target int) int {
+	numbers := *numberPointer
 	if len(numbers) <= 0 {
 		return -1
 	}
-	firstSplit := numbers[0]
-	middle, left, right := 0, 0, len(numbers)
-	middle = (left + right) / 2
-	if firstSplit > target {
-		if numbers[middle] > firstSplit {
-			middle = (middle + right) / 2
-		} else {
-			if numbers[middle] > target {
-				middle = (left + middle) / 2
-			} else {
-				middle = (middle + right) / 2
-			}
-		}
-	} else {
+	firstNumber := numbers[0]
+	left, right := 0, len(numbers)-1
+	for left <= right {
+		middle := (left + right) / 2
+		middleNumber := numbers[middle]
 
+		if middleNumber == target {
+			return middle
+		}
+
+		if firstNumber > target {
+			if firstNumber < middleNumber {
+				left = middle + 1
+			} else if firstNumber > middleNumber && middleNumber > target {
+				right = middle - 1
+			} else {
+				left = middle + 1
+			}
+		} else if firstNumber < target {
+			if firstNumber > middleNumber {
+				right = middle - 1
+			} else if firstNumber < middleNumber && middleNumber > target {
+				right = middle - 1
+			} else {
+				left = middle + 1
+			}
+		} else {
+			return 0
+		}
 	}
 	return -1
 }
