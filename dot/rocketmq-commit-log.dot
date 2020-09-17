@@ -1,0 +1,10 @@
+digraph {
+    rankdir="RL"
+    commitLog [
+        shape=record
+        label="总大小\n4字节|
+               Magic Code\n4字节|
+               Queue ID\n4字节|
+               "
+    ]
+}
