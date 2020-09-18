@@ -60,6 +60,7 @@ import "fmt"
 //Only the filled cells need to be validated according to the mentioned rules.
 //The given board contain only digits 1-9 and the character '.'.
 //The given board size is always 9x9.
+//可以一次遍历，然后存储读取的数据到9+9+9个HashMap当中去，每次都检查一下放进去的数字是否重复了
 
 func ValidSudoku() {
 	board := [][]byte{
