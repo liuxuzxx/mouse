@@ -34,6 +34,7 @@ import "fmt"
 //-10^9 <= nums[i] <= 10^9
 //nums is a non decreasing array.
 //-10^9 <= target <= 10^9
+//这个可以使用二分查找继续查找，一直找到边界为止
 
 func FindFirstAndLastPosition() {
 	nums := []int{1}
