@@ -14,7 +14,7 @@ import (
  * go clean 类似于mvn clean，就是清除已经编译好的可执行的文件一类的东西
  */
 func main() {
-	leetcode.ValidSudoku()
+	leetcode.SudokuSolver()
 }
 
 func redisFound() {
@@ -85,4 +85,5 @@ func leetCode() {
 	leetcode.FindFirstAndLastPosition()
 	leetcode.SearchInsertPosition()
 	leetcode.ValidSudoku()
+	leetcode.SudokuSolver()
 }
