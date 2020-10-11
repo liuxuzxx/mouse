@@ -105,11 +105,12 @@ type CertificationRequest struct {
 	databaseName     string
 	password         string
 	scrambleData     []byte
+	pluginName       string
 }
 
 func (c *CertificationRequest) encode() []byte {
 	c.sequenceId = 1
-	c.clientFlag = 2
+	c.clientFlag = 8
 	c.maxPacketSize = 1
 	c.clientCharset = 8
 	c.unUseInformation = [23]byte{0}

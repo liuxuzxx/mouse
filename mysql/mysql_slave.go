@@ -50,6 +50,7 @@ func certification(seed []byte) {
 		userName:     "root",
 		databaseName: "ancient_article",
 		password:     "root",
+		pluginName:   "mysql_native_password",
 		scrambleData: seed,
 	}
 	result := request.encode()
