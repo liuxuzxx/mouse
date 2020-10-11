@@ -2,7 +2,9 @@ package mysql
 
 import (
 	"bytes"
+	"crypto/sha1"
 	"encoding/binary"
+	"fmt"
 )
 
 //
@@ -93,15 +95,68 @@ func (g *GreetingProtocol) parse(source []byte) {
 }
 
 type CertificationRequest struct {
-	payloadLength      int32
-	sequenceId         int32
-	clientFlag         int32
-	maxPacketSize      int32
-	clientCharset      int32
-	unUseInformation   [23]byte
-	userName           string
-	clientCapability   int32
-	scrambleData       [20]byte
-	databaseName       string
-	scramblePluginName string
+	payloadLength    int32
+	sequenceId       int32
+	clientFlag       int32
+	maxPacketSize    int32
+	clientCharset    uint8
+	unUseInformation [23]byte
+	userName         string
+	databaseName     string
+	password         string
+	scrambleData     []byte
+}
+
+func (c *CertificationRequest) encode() []byte {
+	c.sequenceId = 1
+	c.clientFlag = 2
+	c.maxPacketSize = 1
+	c.clientCharset = 8
+	c.unUseInformation = [23]byte{0}
+
+	loginRequestByte := make([]byte, 0)
+	loginRequestByte = append(loginRequestByte, byte(c.sequenceId))
+
+	loginRequestByte = append(loginRequestByte, c.convertLittleEndian(c.clientFlag)...)
+	loginRequestByte = append(loginRequestByte, c.convertLittleEndian(c.maxPacketSize)...)
+	loginRequestByte = append(loginRequestByte, c.clientCharset)
+	loginRequestByte = append(loginRequestByte, c.unUseInformation[0:]...)
+	loginRequestByte = append(loginRequestByte, append([]byte(c.userName), byte(0))...)
+	loginRequestByte = append(loginRequestByte, c.mysqlNativePassword()...)
+	loginRequestByte = append(loginRequestByte, append([]byte(c.databaseName), byte(0))...)
+
+	protocolLength := len(loginRequestByte)
+	lengthBytes := c.convertLittleEndian(int32(protocolLength))
+
+	protocolBytes := make([]byte, 0)
+	protocolBytes = append(protocolBytes, lengthBytes[0:3]...)
+	protocolBytes = append(protocolBytes, loginRequestByte...)
+
+	return protocolBytes
+}
+
+func (c *CertificationRequest) convertLittleEndian(source int32) []byte {
+	targetBytes := make([]byte, 4)
+	binary.LittleEndian.PutUint32(targetBytes, uint32(source))
+	return targetBytes
+}
+
+func (c *CertificationRequest) mysqlNativePassword() []byte {
+	sha1Crypt := sha1.New()
+	sha1Crypt.Write([]byte(c.password))
+	hashStageFirst := sha1Crypt.Sum(nil)
+	fmt.Printf("%x\n", hashStageFirst)
+
+	sha1Crypt.Reset()
+	sha1Crypt.Write(hashStageFirst)
+	hashStageSecond := sha1Crypt.Sum(nil)
+
+	sha1Crypt.Reset()
+	sha1Crypt.Write(append(c.scrambleData, hashStageSecond...))
+	hashStateThird := sha1Crypt.Sum(nil)
+
+	for index := 0; index < len(hashStateThird); index = index + 1 {
+		hashStateThird[index] = hashStateThird[index] ^ hashStageFirst[index]
+	}
+	return hashStateThird
 }

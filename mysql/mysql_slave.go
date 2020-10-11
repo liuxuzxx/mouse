@@ -12,8 +12,13 @@ import (
 //复制是怎么交互的
 
 const (
-	mysqlIP   = "172.16.16.46"
+	mysqlIP   = "localhost"
 	mysqlPort = 3306
+)
+
+var (
+	conn net.Conn
+	err  error
 )
 
 func SlaveBinlog() {
@@ -22,7 +27,7 @@ func SlaveBinlog() {
 
 //首先和mysql的master节点建立链接
 func establishConnection() {
-	conn, err := net.Dial("tcp", strings.Join([]string{mysqlIP, strconv.Itoa(mysqlPort)}, ":"))
+	conn, err = net.Dial("tcp", strings.Join([]string{mysqlIP, strconv.Itoa(mysqlPort)}, ":"))
 	if err != nil {
 		fmt.Printf(err.Error())
 		return
@@ -36,8 +41,28 @@ func establishConnection() {
 	protocol := GreetingProtocol{}
 	protocol.parse(answerByte)
 	fmt.Printf("查看对象%v\n", protocol)
+
+	certification(append([]byte(protocol.scrambleDataPart1), []byte(protocol.scrambleDataPart2)...))
 }
 
-func certification() {
+func certification(seed []byte) {
+	request := CertificationRequest{
+		userName:     "root",
+		databaseName: "ancient_article",
+		password:     "root",
+		scrambleData: seed,
+	}
+	result := request.encode()
+	count, writeErr := conn.Write(result)
+	if writeErr != nil {
+		fmt.Printf("查看错误信息:%v\n", writeErr.Error())
+	}
+	fmt.Printf("查看写入数量:%d\n", count)
 
+	authResult := make([]byte, 1000)
+	readCount, readErr := conn.Read(authResult)
+	if readErr != nil {
+		fmt.Printf("读取错误:%v\n", readErr.Error())
+	}
+	fmt.Printf("读取内容长度:%d\n", readCount)
 }

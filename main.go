@@ -47,7 +47,7 @@ func goBook() {
 	book.DivideNumber(10)
 	book.FunctionPoint()
 	name := book.DeferOperation()
-	fmt.Printf("茶案名字:%s\n", name)
+	fmt.Printf("查看名字:%s\n", name)
 	book.OperationArea()
 	book.RemoteStrategy()
 	book.Pipeline()
