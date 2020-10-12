@@ -109,9 +109,9 @@ type CertificationRequest struct {
 }
 
 func (c *CertificationRequest) encode() []byte {
-	c.sequenceId = 1
-	c.clientFlag = 8
-	c.maxPacketSize = 1
+	c.sequenceId = 2
+	c.clientFlag = 1<<19 + 8
+	c.maxPacketSize = 128
 	c.clientCharset = 8
 	c.unUseInformation = [23]byte{0}
 
@@ -123,7 +123,7 @@ func (c *CertificationRequest) encode() []byte {
 	loginRequestByte = append(loginRequestByte, c.clientCharset)
 	loginRequestByte = append(loginRequestByte, c.unUseInformation[0:]...)
 	loginRequestByte = append(loginRequestByte, append([]byte(c.userName), byte(0))...)
-	loginRequestByte = append(loginRequestByte, c.mysqlNativePassword()...)
+	loginRequestByte = append(loginRequestByte, append(c.mysqlNativePassword(), byte(0))...)
 	loginRequestByte = append(loginRequestByte, append([]byte(c.databaseName), byte(0))...)
 
 	protocolLength := len(loginRequestByte)

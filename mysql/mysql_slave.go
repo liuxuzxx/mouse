@@ -65,5 +65,5 @@ func certification(seed []byte) {
 	if readErr != nil {
 		fmt.Printf("读取错误:%v\n", readErr.Error())
 	}
-	fmt.Printf("读取内容长度:%d\n", readCount)
+	fmt.Printf("读取内容长度:%d %s\n", readCount, string(authResult))
 }
