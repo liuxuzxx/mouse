@@ -14,11 +14,11 @@ import (
 type GreetingProtocol struct {
 	payloadLength            int32
 	sequenceId               int32
-	version                  int32
+	protocolVersion          int32
 	serverVersionInformation string
 	threadId                 int32
 	scrambleDataPart1        string
-	emptyInt                 int32
+	capabilityFlags1         int32
 	serverCharset            int32
 	serverStatus             int32
 	serverCapability         int32
@@ -32,9 +32,9 @@ func (g *GreetingProtocol) parse(source []byte) {
 	index := 0
 	_ = binary.Read(bytes.NewBuffer(append(source[0:3], byte(0))), binary.LittleEndian, &g.payloadLength)
 	g.sequenceId = int32(source[3])
-	g.version = int32(source[4])
+	g.protocolVersion = int32(source[4])
 	index = 5
-	serverVersionBytes := make([]byte, 10)
+	serverVersionBytes := make([]byte, 0)
 	for start := index; start < len(source); start = start + 1 {
 		if source[start] == byte(0) {
 			index = start
@@ -46,18 +46,9 @@ func (g *GreetingProtocol) parse(source []byte) {
 	_ = binary.Read(bytes.NewBuffer(source[index+1:index+5]), binary.LittleEndian, &g.threadId)
 
 	index = index + 5
-	scrambleDataPart1Byte := make([]byte, 20)
-	for start := index; start < len(source); start = start + 1 {
-		if source[start] == byte(0) {
-			index = start
-			break
-		}
-		scrambleDataPart1Byte = append(scrambleDataPart1Byte, source[start])
-	}
-	g.scrambleDataPart1 = string(scrambleDataPart1Byte)
-
-	index = index + 1
-	_ = binary.Read(bytes.NewBuffer(source[index:index+2]), binary.LittleEndian, &g.emptyInt)
+	g.scrambleDataPart1 = string(source[index : index+8])
+	index = index + 1 + 8
+	_ = binary.Read(bytes.NewBuffer(source[index:index+2]), binary.LittleEndian, &g.capabilityFlags1)
 	index = index + 2
 	g.serverCharset = int32(source[index])
 	index = index + 1
@@ -109,9 +100,9 @@ type CertificationRequest struct {
 }
 
 func (c *CertificationRequest) encode() []byte {
-	c.sequenceId = 2
+	c.sequenceId = 0
 	c.clientFlag = 1<<19 + 8
-	c.maxPacketSize = 128
+	c.maxPacketSize = 82
 	c.clientCharset = 8
 	c.unUseInformation = [23]byte{0}
 

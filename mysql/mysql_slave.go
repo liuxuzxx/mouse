@@ -40,7 +40,15 @@ func establishConnection() {
 	}
 	protocol := GreetingProtocol{}
 	protocol.parse(answerByte)
-	fmt.Printf("查看对象%v\n", protocol)
+	fmt.Printf("协议长度:%d\n", protocol.payloadLength)
+	fmt.Printf("序列号:%d\n", protocol.sequenceId)
+	fmt.Printf("版本号:%d\n", protocol.protocolVersion)
+	fmt.Printf("数据库版本信息:%s\n", protocol.serverVersionInformation)
+	fmt.Printf("线程ID:%d\n", protocol.threadId)
+	fmt.Printf("挑战随机数(第一部分):%s 长度:%d\n", protocol.scrambleDataPart1, len(protocol.scrambleDataPart1))
+	fmt.Printf("能力标记:%d\n", protocol.serverCapability)
+	fmt.Printf("字符编码:%d\n", protocol.serverCharset)
+	fmt.Printf("插件名字:%s\n", protocol.scramblePluginName)
 
 	certification(append([]byte(protocol.scrambleDataPart1), []byte(protocol.scrambleDataPart2)...))
 }
