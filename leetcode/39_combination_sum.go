@@ -1,5 +1,7 @@
 package leetcode
 
+import "fmt"
+
 //39. Combination Sum
 //Medium
 //
@@ -52,9 +54,29 @@ package leetcode
 //1 <= target <= 500
 
 func CombinationSum() {
-
+	candidates := []int{2, 7, 6, 3, 5, 1}
+	target := 9
+	result := doCombinationSum(candidates, target)
+	fmt.Printf("查看结果:%d", len(result))
 }
 
 func doCombinationSum(candidates []int, target int) [][]int {
+	if target <= 0 || len(candidates) == 0 {
+		return [][]int{}
+	}
+	if len(candidates) == 1 && candidates[0] == target {
+		return [][]int{{target}}
+	}
+	first := candidates[0]
+	haveFirstResult := doCombinationSum(candidates, target-first)
+	noFirstResult := doCombinationSum(candidates[1:], target)
 
+	for index := 0; index < len(haveFirstResult); index = index + 1 {
+		haveFirstResult[index] = append(haveFirstResult[index], first)
+	}
+	sumResult := append(haveFirstResult, noFirstResult...)
+	if first == target {
+		return append(sumResult, [][]int{{first}}...)
+	}
+	return sumResult
 }
