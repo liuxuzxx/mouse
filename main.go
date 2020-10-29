@@ -15,7 +15,7 @@ import (
  */
 func main() {
 	//mysql.SlaveBinlog()
-	leetcode.CombinationSum()
+	leetcode.CombinationSumII()
 }
 
 func redisFound() {
@@ -89,4 +89,5 @@ func leetCode() {
 	leetcode.SudokuSolver()
 	leetcode.CountAndSay()
 	leetcode.CombinationSum()
+	leetcode.CombinationSumII()
 }
