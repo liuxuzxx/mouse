@@ -61,8 +61,8 @@ func filterCombination(candidates []int, target int) [][]int {
 		return [][]int{{target}}
 	}
 	first := candidates[0]
-	haveFirstResult := doCombinationSum(candidates[1:], target-first)
-	noFirstResult := doCombinationSum(candidates[1:], target)
+	haveFirstResult := filterCombination(candidates[1:], target-first)
+	noFirstResult := filterCombination(candidates[1:], target)
 
 	for index := 0; index < len(haveFirstResult); index = index + 1 {
 		haveFirstResult[index] = append(haveFirstResult[index], first)
