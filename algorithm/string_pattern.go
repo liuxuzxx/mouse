@@ -15,11 +15,11 @@ func preprocess(pattern string) []int {
 	patternRunes := []rune(pattern)
 	for index := 1; index < len(patternRunes); index = index + 1 {
 		tempState := transactionState[index-1]
-		if patternRunes[index] == patternRunes[tempState+1] {
+		if patternRunes[index] == patternRunes[tempState] {
 			transactionState[index] = tempState + 1
 		} else {
 			for ; tempState > 0; tempState = transactionState[tempState] {
-				if patternRunes[index] == patternRunes[tempState+1] {
+				if patternRunes[index] == patternRunes[tempState] {
 					transactionState[index] = tempState + 1
 				}
 			}
@@ -32,7 +32,7 @@ func preprocess(pattern string) []int {
 }
 
 func KMPStringMatch() {
-	pattern := "abcabcab"
+	pattern := "abcabcac"
 	result := preprocess(pattern)
 	fmt.Printf("%v \n", result)
 }
