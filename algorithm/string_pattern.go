@@ -31,8 +31,28 @@ func preprocess(pattern string) []int {
 	return transactionState
 }
 
+func kmpMatch(template, pattern string) {
+	stateFunc := preprocess(pattern)
+	templateRunes := []rune(template)
+	patternRunes := []rune(pattern)
+	templateLength := len(templateRunes)
+	patternLength := len(patternRunes)
+	for index := 0; index < templateLength; index = index + 1 {
+		for patternIndex := 0; patternIndex < patternLength; {
+			if patternRunes[patternIndex] != templateRunes[patternIndex+index] && patternIndex > 0 {
+				stateIndex := stateFunc[patternIndex-1]
+				patternIndex = patternIndex - stateIndex
+			}
+			if patternIndex+1 == patternLength {
+				fmt.Printf("找到一个有效的位置:%d\n", index)
+			}
+		}
+	}
+
+}
+
 func KMPStringMatch() {
-	pattern := "abcabcac"
-	result := preprocess(pattern)
-	fmt.Printf("%v \n", result)
+	pattern := "ababaca"
+	template := "ababaababaca"
+	kmpMatch(pattern, template)
 }
