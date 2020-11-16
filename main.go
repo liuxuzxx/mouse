@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"mouse/algorithm"
 	"mouse/book"
 	"mouse/leetcode"
 	"mouse/redis"
@@ -16,7 +15,8 @@ import (
  */
 func main() {
 	//mysql.SlaveBinlog()
-	algorithm.KMPStringMatch()
+	//algorithm.KMPStringMatch()
+	leetcode.CombinationSumII()
 }
 
 func redisFound() {

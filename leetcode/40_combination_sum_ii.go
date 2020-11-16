@@ -45,12 +45,13 @@ import "fmt"
 //1 <= candidates.length <= 100
 //1 <= candidates[i] <= 50
 //1 <= target <= 30
+//需要对结果过滤一下
 
 func CombinationSumII() {
 	candidates := []int{10, 1, 2, 7, 6, 1, 5}
 	target := 8
 	result := filterCombination(candidates, target)
-	fmt.Printf("%d\n", len(result))
+	fmt.Printf("%v\n", result)
 }
 
 func filterCombination(candidates []int, target int) [][]int {
