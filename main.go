@@ -16,7 +16,7 @@ import (
 func main() {
 	//mysql.SlaveBinlog()
 	//algorithm.KMPStringMatch()
-	leetcode.CombinationSumII()
+	leetcode.FirstMissingPositive()
 }
 
 func redisFound() {
@@ -91,4 +91,5 @@ func leetCode() {
 	leetcode.CountAndSay()
 	leetcode.CombinationSum()
 	leetcode.CombinationSumII()
+	leetcode.FirstMissingPositive()
 }
